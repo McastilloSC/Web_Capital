@@ -1,0 +1,75 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+@import 'leaflet/dist/leaflet.css';
+
+
+@import 'react-toastify/dist/ReactToastify.css';
+
+@import 'react-pdf/dist/Page/AnnotationLayer.css';
+@import 'react-pdf/dist/Page/TextLayer.css';
+
+@import '/node_modules/react-grid-layout/css/styles.css';
+@import '/node_modules/react-resizable/css/styles.css';
+
+@import 'react-big-calendar/lib/css/react-big-calendar.css';
+
+::-webkit-scrollbar {
+    width: 4px;
+    height: 12px;
+}
+   
+::-webkit-scrollbar-track {
+    background: #fff;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #D5D5D5; 
+    border: 3px solid #d1d1d1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #707070; 
+}
+
+.style-reportes-pbi{
+    width: 100%;
+    height: 95%;
+    box-shadow: 20px black;
+}
+
+/*React Tables Styles*/
+.resizer {
+  position: absolute;
+  top: 0;
+  height: 50px;
+  width: 5px;
+  background: rgba(0, 0, 0, 0.5);
+  cursor: col-resize;
+  user-select: none;
+  touch-action: none;
+}
+
+.resizer.ltr {
+  right: 0;
+}
+
+.resizer.rtl {
+  left: 0;
+}
+
+.resizer.isResizing {
+  background: rgb(120, 120, 236);
+  opacity: 1;
+}
+
+@media (hover: hover) {
+  .resizer {
+    opacity: 0;
+  }
+
+  *:hover > .resizer {
+    opacity: 1;
+  }
+}
