@@ -13,28 +13,11 @@ export const CatalogosProvider = ({ children }) => {
 
     const [ loadingCatalogos, setLoadingCatalogos ] = useState(false);
 
-    //Catalogos Pipeline
-    const [ catalogosPipeline, setCatalogosPipeline ] = useState({}) 
-
     //Catalogos Capital
     const [ catalogosCapital, setCatalogosCapital ] = useState({})
 
-    //Catalogos Capital
+    //Catalogos Inventario
     const [ catalogosInventario, setCatalogosInventario ] = useState({})
-
-    const onObtenerCatalogosPipeline = async () => {
-        setLoadingCatalogos(true)
-        try {
-            const { data } = await axios.get('pipeline/catalogos');
-            setCatalogosPipeline(data.catalogos)
-        } catch (error) {
-            setLoadingCatalogos(false)
-            console.log(error)
-        } finally {
-            setLoadingCatalogos(false)
-        }
-        console.log(loadingCatalogos)
-    }
 
     const onObtenerCatalogosCapital = async () => {
         try {
@@ -80,8 +63,6 @@ export const CatalogosProvider = ({ children }) => {
         <CatalogosContext.Provider
             value={{
                 loadingCatalogos,
-                catalogosPipeline, 
-                setCatalogosPipeline,
                 catalogosCapital,
                 setCatalogosCapital,
                 catalogosInventario,

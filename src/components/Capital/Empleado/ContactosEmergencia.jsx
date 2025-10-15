@@ -20,7 +20,6 @@ const ContactosEmergencia = ({ empleadoId }) => {
         try {
             const { data } = await axios.get(`/capital/empleados/${empleadoId}/contactos_emergencia`);
             setContactos(data);
-            console.log(data);
         } catch (error) {
             console.error(error);
             toast.error('Error al cargar contactos');

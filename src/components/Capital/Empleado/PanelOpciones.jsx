@@ -146,6 +146,7 @@ const PanelOpciones = ({ capturaIncidencias, setCapturaIncidencias, mostrarConta
                                             </label>
                                         ) : ''}
 
+                                        {!empleado.fecha_baja ? (
                                         <button
                                             onClick={() => {
                                                 setMostrarContactos(!mostrarContactos);
@@ -165,6 +166,7 @@ const PanelOpciones = ({ capturaIncidencias, setCapturaIncidencias, mostrarConta
                                                 </div>
                                             </div>
                                         </button>
+                                        ): ''}
 
 
                                         {perfilCapital.incidencias.registro_incidencia && !empleado.fecha_baja ? (

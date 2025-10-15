@@ -50,7 +50,7 @@ const Login = () => {
         setLoading(false)
     }
 
-    if(logged) return navigate('/home')
+    if(logged) return navigate('/home/capital_humano')
 
     return (
         <form onSubmit={formik.handleSubmit}>

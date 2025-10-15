@@ -30,7 +30,7 @@ const FormEditaEmpleado = ({ empleadoInfo, setEmpleado }) => {
         sexo: Yup.string().required('Obligatorio'),
         nacionalidad: Yup.string().required('Obligatorio'),
         estado_civil: Yup.string().required('Obligatorio'),
-        alias: Yup.string().min(8, 'Min 8 Caracteres').max(8, 'Max 8 Caracteres').nullable(),
+        id_cliente: Yup.string().nullable().required('Obligatorio'),
         nombre: Yup.string().required('Obligatorio'),
         apellidos: Yup.string().required('Obligatorio'),
         correo: Yup.string().nullable(),
@@ -45,14 +45,15 @@ const FormEditaEmpleado = ({ empleadoInfo, setEmpleado }) => {
         banco: Yup.number().required(),
         cuenta: Yup.string().min(16, 'Min 16 Digitos').max(16, 'Max 16 Digitos').required('Obligatorio'),
         clabe: Yup.string().min(18, 'Min 18 Digitos').max(18, 'Max 18 Digitos').required('Obligatorio'),
-        jefe_directo: Yup.string().required('Obligatorio'),
+        jefe_directo: Yup.string().nullable().required('Obligatorio'),
         fecha_alta: Yup.string().required('Obligatorio'),
         sueldo_diario: Yup.number().required('Obligatorio'),
         sueldo_bruto: Yup.number().required('Obligatorio'),
         sueldo_integrado: Yup.number().required('Obligatorio'),
     })
-
+    
     const formik = useFormik({
+        enableReinitialize: true,
         validationSchema: nuevoEmpleadoSchema,
         initialValues: {
             foto_empleado: '',
@@ -70,7 +71,7 @@ const FormEditaEmpleado = ({ empleadoInfo, setEmpleado }) => {
             sexo: empleadoInfo.sexo,
             nacionalidad: empleadoInfo.nacionalidad,
             estado_civil: empleadoInfo.estado_civil,
-            alias: empleadoInfo.alias,
+            id_cliente: empleadoInfo.id_cliente?.toString() || '',
             nombre: empleadoInfo.nombre,
             apellidos: empleadoInfo.apellidos,
             correo: empleadoInfo.correo,
@@ -85,7 +86,7 @@ const FormEditaEmpleado = ({ empleadoInfo, setEmpleado }) => {
             banco: empleadoInfo.id_banco, 
             cuenta: empleadoInfo.cuenta,
             clabe: empleadoInfo.clabe,
-            jefe_directo: empleadoInfo.id_jefe_directo,
+            jefe_directo: empleadoInfo.id_jefe_directo?.toString() || '',
             fecha_alta: empleadoInfo.fecha_alta,
             sueldo_diario: empleadoInfo.sueldo_diario,
             sueldo_bruto: empleadoInfo.sueldo_bruto,
@@ -97,6 +98,8 @@ const FormEditaEmpleado = ({ empleadoInfo, setEmpleado }) => {
     })
 
     const onUpdateEmpleado = async (values) => {
+
+        
         setErrores({})
         setLoading(true)
         try {
@@ -117,7 +120,7 @@ const FormEditaEmpleado = ({ empleadoInfo, setEmpleado }) => {
         }
         setLoading(false)
     }
-
+ 
     return (
         <form onSubmit={formik.handleSubmit}>
             <div className='grid grid-rows-1 gap-5'>
@@ -153,13 +156,37 @@ const FormEditaEmpleado = ({ empleadoInfo, setEmpleado }) => {
                         <select disabled={loading} name="empresa" onChange={formik.handleChange} value={formik.values.empresa} className="select select-sm select-bordered w-full">
                             <option defaultValue={''}>--Selecciona--</option>
                             { catalogosCapital.empresas.sort((a, b) => a.empresa.localeCompare(b.empresa)).map((empresa, index) => (
-                                <option key={index} value={empresa.empresa}>{empresa.empresa}</option>
+                                <option key={index} value={empresa.empresa.nombre_completo}>{empresa.empresa}</option>
                             ))}
                         </select>
                     </div>
+
                 </div>
 
                 <div className='grid grid-cols-12 gap-5'>
+                    <div className='col-span-3 form-control'>
+                        <label className="label font-semibold">
+                            <span className="label-text">Cliente</span>
+                            {formik.errors.id_cliente && formik.touched.id_cliente 
+                                ? <span className="label-text-alt text-red-500">Obligatorio</span>
+                                : null
+                            } 
+                        </label>
+                        <select
+                            disabled={loading}
+                            name="id_cliente"
+                            onChange={formik.handleChange}
+                            value={formik.values.id_cliente}
+                            className="select select-sm select-bordered w-full"
+                        >
+                            <option value=''>--Selecciona--</option>
+                            {catalogosCapital.clientes?.map(cliente => (
+                                <option key={cliente.id_cliente} value={cliente.id_cliente.toString()}>
+                                    {cliente.nombre_cliente}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                     <div className='col-span-3 form-control'>
                         <label className="label font-semibold">
                             <span className="label-text">Centro Costo</span>
@@ -175,6 +202,7 @@ const FormEditaEmpleado = ({ empleadoInfo, setEmpleado }) => {
                             ))}
                         </select>
                     </div>
+
                     <div className='col-span-3 form-control'>
                         <label className="label font-semibold">
                             <span className="label-text">Tipo Costo</span>
@@ -328,17 +356,6 @@ const FormEditaEmpleado = ({ empleadoInfo, setEmpleado }) => {
                     </div>
                     <div className='col-span-3 form-control'>
                         <label className="label font-semibold">
-                            <span className="label-text">Alias</span>
-                            { formik.errors.alias && formik.touched.alias 
-                                ? <span className="label-text-alt text-red-500">Obligatorio</span>
-                                : null
-                            }
-                        </label>
-                        <input disabled={loading} minLength={8} maxLength={8} type="text" name='alias' onChange={formik.handleChange} value={formik.values.alias} placeholder="..." className="input input-sm  input-bordered w-full" />
-                    </div>
-
-                    <div className='col-span-3 form-control'>
-                        <label className="label font-semibold">
                             <span className="label-text">Nombre</span>
                             { formik.errors.nombre && formik.touched.nombre 
                                 ? <span className="label-text-alt text-red-500">Obligatorio</span>
@@ -488,7 +505,7 @@ const FormEditaEmpleado = ({ empleadoInfo, setEmpleado }) => {
                         <select disabled={loading} name="jefe_directo" onChange={formik.handleChange} value={formik.values.jefe_directo} className="select select-sm select-bordered w-full">
                             <option defaultValue={''}>--Selecciona--</option>
                             { catalogosCapital.jefes_directos.map((jefe) => (
-                                <option key={jefe.id_jefe_directo} value={jefe.id_jefe_directo}>{jefe.nombre}</option>
+                                <option key={jefe.id_jefe_directo} value={jefe.id_jefe_directo.toString()}>{jefe.nombre_completo}</option>
                             ))}
                         </select>
                     </div>

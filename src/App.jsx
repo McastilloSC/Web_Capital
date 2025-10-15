@@ -3,12 +3,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 //Screen Auth
 import Login from './pages/Auth/Login'
 
-//Screen Pipeline
-import HomePipeline from './pages/pipeline/Home'
-import Cliente from './pages/pipeline/Cliente'
-import Proyecto from './pages/pipeline/Proyecto'
-import Dashboard from './pages/pipeline/Dashboard'
-
 //Screens Capital
 import HomeCapital from './pages/Capital/Home'
 import Empleado from './pages/Capital/Empleado'
@@ -20,7 +14,6 @@ import Inventario from './pages/Inventario/Inicio'
 import Registro from './pages/Inventario/Registro'
 
 //Layout
-import MainPipeline from './layout/MainPipeline'
 import MainCapital from './layout/MainCapital'
 import MainInventario from './layout/MainInventario'
 
@@ -45,16 +38,9 @@ const App = () => {
                 <Route index element={<Login />}/>
               </Route>
 
-              <Route path='/home'>
+              {/* <Route path='/home'>
                 <Route index element={<Home />}/>
-              </Route>
-
-              <Route path='/home/pipeline' element={<MainPipeline />}>
-                <Route index element={<HomePipeline />}/>
-                <Route path='dashboard' element={<Dashboard />}/>
-                <Route path='cliente/:idCliente' element={<Cliente />}/>
-                <Route path='proyecto/:idProyecto' element={<Proyecto />}/>
-              </Route>
+              </Route> */}
 
               <Route path='/home/capital_humano' element={<MainCapital />}> {/* Layout de todas estas Rutas */}
                 <Route index element={<HomeCapital />}/>

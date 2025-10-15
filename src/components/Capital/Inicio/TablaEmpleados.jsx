@@ -85,7 +85,7 @@ const TablaEmpleados = ({ empleados, setEmpleados, setModalNuevoEmpleado }) => {
                 const { data } = await axios.get(`/capital/empleado?page=${currentPage}` , {
                     params: params
                 });
-                console.log(data)
+                //console.log(data)
                 setEmpleados(data.empleados.data)
                 setLastPage(data.empleados.last_page)
             } catch (error) {
