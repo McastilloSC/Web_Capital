@@ -165,7 +165,7 @@ const TablaEmpleados = ({ empleados, setEmpleados, setModalNuevoEmpleado }) => {
                                         <p className='font-semibold text-gray-500'>{empleado.tipo_pago}</p>
                                     </td>
                                     <td className='text-xs'>
-                                        <Link to={`/home/capital_humano/empleado/${empleado.id_empleado}`} className='transition font-semibold hover:text-blue-500 duration-300'>{empleado.nombre}</Link>
+                                        <Link to={`/capital_humano/empleado/${empleado.id_empleado}`} className='transition font-semibold hover:text-blue-500 duration-300'>{empleado.nombre}</Link>
                                         <p className='font-semibold text-gray-500'>Nomina: {empleado.numero_nomina}</p>
                                     </td>
                                     <td className='text-xs'>

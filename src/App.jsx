@@ -37,18 +37,12 @@ const App = () => {
               <Route path='/'>
                 <Route index element={<Login />}/>
               </Route>
-
-              {/* <Route path='/home'>
-                <Route index element={<Home />}/>
-              </Route> */}
-
-              <Route path='/home/capital_humano' element={<MainCapital />}> {/* Layout de todas estas Rutas */}
+              <Route path='/capital_humano' element={<MainCapital />}> {/* Layout de todas estas Rutas */}
                 <Route index element={<HomeCapital />}/>
                 <Route path='empleado/:idEmpleado' element={<Empleado />}/>
                 <Route path='perfiles' element={<PerfilesCapital />}/>
                 <Route path='usuarios' element={<UsuariosCapital />}/>
               </Route>
-
               <Route path='/home/inventario' element={<MainInventario />}> {/* Layout de todas estas Rutas */}
                 <Route index element={<Inventario />}/>
                 <Route path='registro' element={<Registro />}/>

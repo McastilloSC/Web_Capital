@@ -34,7 +34,7 @@ const MainCapital = () => {
 
                     <ul className="menu menu-xs bg-base-200 rounded-lg max-w-xs w-full">
                         <li>
-                            <Link to={'/home/capital_humano'}>
+                            <Link to={'/capital_humano'}>
                                 <BsFillHouseDoorFill className='text-xl'/>
                                 Inicio
                             </Link>
@@ -51,7 +51,7 @@ const MainCapital = () => {
                                             <ul>
                                                 { perfilCapital.menus.menu_perfiles && (
                                                     <li>
-                                                        <Link to={'/home/capital_humano/perfiles'}>
+                                                        <Link to={'/capital_humano/perfiles'}>
                                                             <BsFillPersonLinesFill className='text-xl'/>
                                                             Perfiles
                                                         </Link>

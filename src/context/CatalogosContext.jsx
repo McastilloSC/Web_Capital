@@ -46,10 +46,6 @@ export const CatalogosProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        if(location.pathname.match('/home/pipeline')){
-            onObtenerCatalogosPipeline();
-        }        
-
         if(location.pathname.match('/home/capital_humano')){
             onObtenerCatalogosCapital();
         } 

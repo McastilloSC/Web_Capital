@@ -4,7 +4,7 @@ const apiURL = import.meta.env.VITE_API_URL;
 const apiDev = import.meta.env.VITE_API_URL_DEV;
 
 // Set config defaults when creating the instance
-console.log(import.meta.env.PROD ? apiURL : apiDev)
+//console.log(import.meta.env.PROD ? apiURL : apiDev)
 const instance = axios.create({
     baseURL: import.meta.env.PROD ? apiURL : apiDev
 });

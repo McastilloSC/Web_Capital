@@ -83,7 +83,7 @@ const FormBajaEmpleado = ({ seleccionEmpleado }) => {
                 success: 'Baja Registrada Correctamente, Espera, Serás redireccionado',
             });
             setTimeout(() => {
-                navigate('/home/capital_humano');
+                navigate('/capital_humano');
             }, 3000);
         } catch (error) {
             setLoading(false);

@@ -42,7 +42,7 @@ const Login = () => {
             setLogged(true);
             setUsuario(data.usuario)
             localStorage.setItem('token_auth_sc', data.token_auth_sc);
-            navigate('/home')
+            navigate('/')
         } catch (error) { 
             setLoading(false)
             toast(error.response.data.message);
@@ -50,7 +50,7 @@ const Login = () => {
         setLoading(false)
     }
 
-    if(logged) return navigate('/home/capital_humano')
+    if(logged) return navigate('/capital_humano')
 
     return (
         <form onSubmit={formik.handleSubmit}>
