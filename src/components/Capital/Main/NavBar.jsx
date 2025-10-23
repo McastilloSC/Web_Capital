@@ -1,13 +1,18 @@
 import { AiOutlinePoweroff   } from "react-icons/ai";
 import { useNavigate,Link } from 'react-router-dom';
+import { useContext } from "react";
+import { AuthContext } from "../../../context/AuthContext";
 
 const Navbar = () => {
 
   const navigate = useNavigate();
+  const { usuario, setLogged, setUsuario } = useContext(AuthContext);
 
   const onLogoutUsuario = async () => {
     //Remover el Token
     localStorage.removeItem('token_auth_sc');
+    setUsuario(null);
+    setLogged(false);
     navigate('/')
   }
   
@@ -18,6 +23,20 @@ const Navbar = () => {
         Capital Humano
       </Link>
       </div>
+
+
+      <div className="mr-4">
+        {usuario ? (
+          <span className="font-semibold text-gray-700">
+            {usuario.nombre} {usuario.apellidos}
+          </span>
+        ) : (
+          <span className="text-gray-500 italic">Cargando...</span>
+        )}
+      </div>
+
+
+
 
       <div className="flex-none">
         <button className="btn btn-square btn-ghost" onClick={() => onLogoutUsuario()}>

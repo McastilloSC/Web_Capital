@@ -14,7 +14,19 @@ export const CatalogosProvider = ({ children }) => {
     const [ loadingCatalogos, setLoadingCatalogos ] = useState(false);
 
     //Catalogos Capital
-    const [ catalogosCapital, setCatalogosCapital ] = useState({})
+    const [ catalogosCapital, setCatalogosCapital ] = useState({
+        incidencias_generales: [],
+        incidencias_montos: [],
+        ubicaciones: [],
+        areas: [],
+        clientes: [],
+        puestos: [],
+        centro_costos: [],
+        jefes_directos: [],
+        empresas: [],
+        bancos: [],
+        tabulador: [],
+    })
 
     //Catalogos Inventario
     const [ catalogosInventario, setCatalogosInventario ] = useState({})
@@ -23,6 +35,8 @@ export const CatalogosProvider = ({ children }) => {
         try {
             setLoadingCatalogos(true)
             const { data } = await axios.get('capital/catalogos');
+            //console.log('📦 Catálogos recibidos:', data);
+            //console.log('🔢 Número de catálogos:', Object.keys(data).length);
             setCatalogosCapital(data.catalogos)
         } catch (error) {
             setLoadingCatalogos(false)
@@ -46,7 +60,7 @@ export const CatalogosProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        if(location.pathname.match('/home/capital_humano')){
+        if(location.pathname.match('/capital_humano')){
             onObtenerCatalogosCapital();
         } 
 

@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
             }
 
             try {
-                const { data } = await axios.get('/auth/informacion_usuario') 
+                const { data } = await axios.get('/auth/informacion_usuario')
                 setAdministradores(data.administrador)
                 setUsuario(data.usuario)
                 setSistemasAccesos(data.sistemas)
