@@ -1,20 +1,20 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-//APIS
-import axios from '../axios/axios.config'
+// API
+import axios from '../axios/axios.config';
 
 export const CatalogosContext = createContext();
 
 export const CatalogosProvider = ({ children }) => {
 
     const location = useLocation();
-    const navigation = useNavigate()
+    const navigate = useNavigate();
 
-    const [ loadingCatalogos, setLoadingCatalogos ] = useState(false);
+    const [loadingCatalogos, setLoadingCatalogos] = useState(false);
 
-    //Catalogos Capital
-    const [ catalogosCapital, setCatalogosCapital ] = useState({
+    // Catalogos Capital
+    const [catalogosCapital, setCatalogosCapital] = useState({
         incidencias_generales: [],
         incidencias_montos: [],
         ubicaciones: [],
@@ -26,48 +26,82 @@ export const CatalogosProvider = ({ children }) => {
         empresas: [],
         bancos: [],
         tabulador: [],
-    })
+    });
 
-    //Catalogos Inventario
-    const [ catalogosInventario, setCatalogosInventario ] = useState({})
+    // Catalogos Inventario
+    const [catalogosInventario, setCatalogosInventario] = useState({});
 
+    // 🔹 Helper general para obtener token y manejar expiración
+    const setAuthHeader = () => {
+        const token = localStorage.getItem("token_auth_sc");
+        if (!token) return false;
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        return true;
+    };
+
+    // 🔹 Catalogos de Capital
     const onObtenerCatalogosCapital = async () => {
         try {
-            setLoadingCatalogos(true)
-            const { data } = await axios.get('capital/catalogos');
-            //console.log('📦 Catálogos recibidos:', data);
-            //console.log('🔢 Número de catálogos:', Object.keys(data).length);
-            setCatalogosCapital(data.catalogos)
-        } catch (error) {
-            setLoadingCatalogos(false)
-            console.log(error)
-        } finally {
-            setLoadingCatalogos(false)
-        }
-    }
+            setLoadingCatalogos(true);
 
+            if (!setAuthHeader()) {
+                console.warn("⚠️ No hay token, redirigiendo al login");
+                navigate('/');
+                return;
+            }
+
+            const { data } = await axios.get('capital/catalogos');
+            setCatalogosCapital(data.catalogos);
+
+        } catch (error) {
+            console.error("❌ Error al obtener catálogos capital:", error);
+            if (error.response?.status === 401) {
+                // Token inválido o expirado
+                localStorage.removeItem("token_auth_sc");
+                delete axios.defaults.headers.common["Authorization"];
+                navigate('/');
+            }
+        } finally {
+            setLoadingCatalogos(false);
+        }
+    };
+
+    // 🔹 Catalogos de Inventario
     const onObtenerCatalogosInventario = async () => {
         try {
-            setLoadingCatalogos(true)
+            setLoadingCatalogos(true);
+
+            if (!setAuthHeader()) {
+                console.warn("⚠️ No hay token, redirigiendo al login");
+                navigate('/');
+                return;
+            }
+
             const { data } = await axios.get('inventario/catalogos');
-            setCatalogosInventario(data.catalogos)
+            setCatalogosInventario(data.catalogos);
+
         } catch (error) {
-            setLoadingCatalogos(false)
-            console.log(error)
+            console.error("❌ Error al obtener catálogos inventario:", error);
+            if (error.response?.status === 401) {
+                localStorage.removeItem("token_auth_sc");
+                delete axios.defaults.headers.common["Authorization"];
+                navigate('/');
+            }
         } finally {
-            setLoadingCatalogos(false)
+            setLoadingCatalogos(false);
         }
-    }
+    };
 
+    // 🔹 Detecta cambios de ruta y obtiene los catálogos correspondientes
     useEffect(() => {
-        if(location.pathname.match('/capital_humano')){
+        if (location.pathname.includes('/capital_humano')) {
             onObtenerCatalogosCapital();
-        } 
+        }
 
-        if(location.pathname.match('/home/inventario')){
+        if (location.pathname.includes('/home/inventario')) {
             onObtenerCatalogosInventario();
-        } 
-    }, [location.pathname, navigation])
+        }
+    }, [location.pathname]);
 
     return (
         <CatalogosContext.Provider
@@ -79,7 +113,7 @@ export const CatalogosProvider = ({ children }) => {
                 setCatalogosInventario,
             }}
         >
-            { children }
+            {children}
         </CatalogosContext.Provider>
-    )
-}
+    );
+};

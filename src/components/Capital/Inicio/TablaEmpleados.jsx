@@ -58,8 +58,12 @@ const TablaEmpleados = ({ empleados, setEmpleados, setModalNuevoEmpleado }) => {
 
             const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 
+            const nombreArchivo = mostrarBajas
+                ? 'Reporte_Empleados_Bajas.xlsx'
+                : 'Reporte_Empleados_Activos.xlsx';
+
             const link = document.createElement('a');
-            link.download = 'Reporte_Empleados.xlsx';
+            link.download = nombreArchivo;
             link.href = URL.createObjectURL(blob);
             link.click();
         } catch (error) {

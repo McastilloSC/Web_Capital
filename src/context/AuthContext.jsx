@@ -1,69 +1,91 @@
-import { createContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
-
-//API
-import axios from '../axios/axios.config'
+import { createContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import axios from "../axios/axios.config";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const [loadingAuth, setLoadingAuth] = useState(false);
+  const [usuario, setUsuario] = useState(null);
+  const [logged, setLogged] = useState(false);
 
-    const [ loadingAuth, setLoadingAuth ] = useState(false)
-    const [ usuario, setUsuario ] = useState({})
-    const [ logged, setLogged ] = useState(false)
+  const [sistemasAcceso, setSistemasAccesos] = useState({});
+  const [administradores, setAdministradores] = useState({});
+  const [perfilCapital, setPerfilCapital] = useState({});
 
-    //Sistemas
-    const [ sistemasAcceso, setSistemasAccesos ] = useState({})
-    const [ administradores, setAdministradores ] = useState({})
+  // 🔹 Obtener info del usuario
+  const onObtenerUsuario = async () => {
+    setLoadingAuth(true);
+    try {
+      const { data } = await axios.get("/auth/informacion_usuario");
+      setUsuario(data.usuario);
+      setAdministradores(data.administrador);
+      setSistemasAccesos(data.sistemas);
+      setPerfilCapital(data.perfil_capital);
+      setLogged(true);
+    } catch (error) {
+      console.error("Error al obtener usuario:", error);
+      localStorage.removeItem("token_auth_sc");
+      setLogged(false);
+      navigate("/"); // redirige al login si falla
+    } finally {
+      setLoadingAuth(false);
+    }
+  };
 
-    //Perfiles
-    const [ perfilCapital, setPerfilCapital ] = useState({})
-    
-    useEffect(() => {
-        const onObtenerUsuario = async () => {
-            setLoadingAuth(true)
-            const token = localStorage.getItem('token_auth_sc');
-            if(!token){
-                navigate('/')
-                return;
-            }
+  // 🔹 Login
+  const onLogin = async (values) => {
+    setLoadingAuth(true);
+    try {
+      const { data } = await axios.post("/auth/login", values);
+      localStorage.setItem("token_auth_sc", data.token);
+      await onObtenerUsuario(); // obtiene usuario y llena contexto
+    } catch (error) {
+      toast(error.response?.data?.error || "Error al iniciar sesión");
+      throw error;
+    } finally {
+      setLoadingAuth(false);
+    }
+  };
 
-            try {
-                const { data } = await axios.get('/auth/informacion_usuario')
-                setAdministradores(data.administrador)
-                setUsuario(data.usuario)
-                setSistemasAccesos(data.sistemas)
-                setPerfilCapital(data.perfil_capital)
-                setLogged(true)
-            } catch (error) {
-                console.log (error)
-                setLogged(false)
-                navigate('/')
-                toast(error.response.data.message);
-            } finally {
-                setLoadingAuth(false)
-            }
-        }
-        onObtenerUsuario();
-    }, [])
+  // 🔹 Logout
+  const onLogout = () => {
+    localStorage.removeItem("token_auth_sc");
+    setUsuario(null);
+    setLogged(false);
+    navigate("/");
+  };
 
-    return (
-        <AuthContext.Provider
-            value={{
-                usuario,
-                setUsuario,
-                loadingAuth,
-                sistemasAcceso,
-                perfilCapital,
-                administradores,
-                logged,
-                setLogged,
-            }}
-        >
-            { children }
-        </AuthContext.Provider>
-    )
-}
+  // 🔹 Al cargar la app
+  useEffect(() => {
+    const token = localStorage.getItem("token_auth_sc");
+    if (token) {
+      onObtenerUsuario();
+    } else {
+      setLoadingAuth(false);
+    }
+  }, []);
+
+  return (
+    <AuthContext.Provider
+      value={{
+        usuario,
+        setUsuario,
+        loadingAuth,
+        sistemasAcceso,
+        perfilCapital,
+        administradores,
+        logged,
+        setLogged,
+        onLogin,
+        onLogout,
+        onObtenerUsuario,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
